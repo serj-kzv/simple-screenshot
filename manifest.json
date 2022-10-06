@@ -1,0 +1,60 @@
+{
+  "manifest_version": 2,
+  "name": "simple-screenshot",
+  "description": "simple-screenshot",
+  "short_name": "simple-screenshot",
+  "author": "serj-kzv",
+  "version": "1",
+  "homepage_url": "https://github.com/serj-kzv/simple-screenshot",
+  "browser_action": {
+    "browser_style": false,
+    "default_icon": "favicon.ico",
+    "default_title": "simple-screenshot"
+  },
+  "background": {
+    "persistent": true,
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "alarms",
+    "bookmarks",
+    "browserSettings",
+    "browsingData",
+    "captivePortal",
+    "clipboardRead",
+    "clipboardWrite",
+    "contextMenus",
+    "contextualIdentities",
+    "cookies",
+    "dns",
+    "downloads",
+    "downloads.open",
+    "find",
+    "geolocation",
+    "history",
+    "identity",
+    "idle",
+    "management",
+    "menus",
+    "nativeMessaging",
+    "notifications",
+    "pkcs11",
+    "privacy",
+    "proxy",
+    "search",
+    "sessions",
+    "storage",
+    "tabHide",
+    "tabs",
+    "theme",
+    "topSites",
+    "unlimitedStorage",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
+  ]
+}
