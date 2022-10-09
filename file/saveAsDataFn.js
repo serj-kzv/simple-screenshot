@@ -2,7 +2,7 @@
  * Returns promise with deltaId if all is fine. Returns promise with an exception if an error is occurred.
  */
 const saveAsDataFn = (content, type, isNewTab, filename) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let deltaId = null, changedListener = null, erasedListener = null, isMemoryCleared = false;
         const
             url = window.URL.createObjectURL(new Blob([content], {type})),
@@ -52,9 +52,7 @@ const saveAsDataFn = (content, type, isNewTab, filename) => {
         browser.downloads.onErased.addListener(erasedListener);
 
         try {
-            browser.downloads.download({url, filename}).then(currentDeltaId => {
-                deltaId = currentDeltaId;
-            });
+            deltaId = await browser.downloads.download({url, filename});
         } catch (e) {
             // clear a memory by url if an error is occurred or the downloading is canceled
             clearMemory();
