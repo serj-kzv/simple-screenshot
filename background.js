@@ -1,4 +1,5 @@
 import openAsPngFn from "./file/openAsPngFn.js";
+import saveAsPngFn from "./file/saveAsPngFn.js";
 
 const sendAndGetFn = async (tabId, msg) => await browser.tabs.sendMessage(tabId, msg);
 const sendAndGetPageSizeFn = async tabId => await sendAndGetFn(tabId, {type: 'getTabPageSize'});
@@ -43,7 +44,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
 
     console.log(screenshotBlob)
 
-    await openAsPngFn(screenshotBlob);
+    await Promise.allSettled([openAsPngFn(screenshotBlob), saveAsPngFn(screenshotBlob, 'test.png')]);
 
     // console.log(tab)
 
