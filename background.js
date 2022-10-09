@@ -1,18 +1,6 @@
 import openAsPngFn from "./file/openAsPngFn.js";
 import saveAsPngFn from "./file/saveAsPngFn.js";
 
-const makeScreenshotFn = async (tabId, width, height) => await browser.tabs.captureTab(
-    tabId,
-    {
-        rect: {
-            x: 0,
-            y: 0,
-            width,
-            height
-        }
-    }
-);
-
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const css = {
         file: '/style.css',
@@ -25,7 +13,17 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     await browser.tabs.insertCSS(css);
 
     const {width, height} = await browser.tabs.sendMessage(tabId, null);
-    const screenshot = await makeScreenshotFn(tabId, width, height);
+    const screenshot = await browser.tabs.captureTab(
+        tabId,
+        {
+            rect: {
+                x: 0,
+                y: 0,
+                width,
+                height
+            }
+        }
+    );
 
     await browser.tabs.removeCSS(css);
 
