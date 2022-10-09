@@ -1,8 +1,6 @@
 import openAsPngFn from "./file/openAsPngFn.js";
 import saveAsPngFn from "./file/saveAsPngFn.js";
 
-const sendAndGetFn = async (tabId, msg) => await browser.tabs.sendMessage(tabId, msg);
-const sendAndGetPageSizeFn = async tabId => await sendAndGetFn(tabId, {type: 'getTabPageSize'});
 const makeScreenshotFn = async (tabId, width, height) => await browser.tabs.captureTab(
     tabId,
     {
@@ -16,9 +14,6 @@ const makeScreenshotFn = async (tabId, width, height) => await browser.tabs.capt
 );
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
-    console.log('test')
-    console.log(tabId)
-
     const css = {
         file: '/style.css',
         allFrames: true,
@@ -29,23 +24,15 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
 
     await browser.tabs.insertCSS(css);
 
-    const {width, height} = await sendAndGetPageSizeFn(tabId);
-
-    console.log(width)
-    console.log(height)
-
+    const {width, height} = await browser.tabs.sendMessage(tabId, null);
     const screenshot = await makeScreenshotFn(tabId, width, height);
 
     await browser.tabs.removeCSS(css);
 
-    console.log(screenshot)
-
     const screenshotBlob = await (await fetch(screenshot)).blob();
 
-    console.log(screenshotBlob)
-
-    await Promise.allSettled([openAsPngFn(screenshotBlob), saveAsPngFn(screenshotBlob, 'test.png')]);
-
-    // console.log(tab)
-
+    await Promise.allSettled([
+        openAsPngFn(screenshotBlob),
+        saveAsPngFn(screenshotBlob, `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`)
+    ]);
 });
