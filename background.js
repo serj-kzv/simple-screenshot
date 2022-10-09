@@ -1,7 +1,22 @@
 import openAsPngFn from "./file/openAsPngFn.js";
 
-browser.browserAction.onClicked.addListener(async () => {
+const sendAndGetFn = async (tabId, msg) => await browser.tabs.sendMessage(tabId, msg);
+const sendAndGetPageSizeFn = async tabId => await sendAndGetFn(tabId, {type: 'getTabPageSize'});
+const makeScreenshotFn = async (tabId, width, height) => await browser.tabs.captureTab(
+    tabId,
+    {
+        rect: {
+            x: 0,
+            y: 0,
+            width,
+            height
+        }
+    }
+);
+
+browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     console.log('test')
+    console.log(tabId)
 
     const css = {
         file: '/style.css',
@@ -13,19 +28,12 @@ browser.browserAction.onClicked.addListener(async () => {
 
     await browser.tabs.insertCSS(css);
 
-    const {width, height} = (await browser.tabs.query({currentWindow: true, active: true}))[0];
+    const {width, height} = await sendAndGetPageSizeFn(tabId);
 
     console.log(width)
+    console.log(height)
 
-    const screenshot = await browser.tabs.captureVisibleTab(
-        (await browser.windows.getCurrent()).id,
-        // {
-        //     rect: {
-        //         width: 9999,
-        //         height: 9999
-        //     }
-        // }
-    );
+    const screenshot = await makeScreenshotFn(tabId, width, height);
 
     await browser.tabs.removeCSS(css);
 
@@ -37,6 +45,6 @@ browser.browserAction.onClicked.addListener(async () => {
 
     await openAsPngFn(screenshotBlob);
 
-    console.log(tab)
+    // console.log(tab)
 
 });
