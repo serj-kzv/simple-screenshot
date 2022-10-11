@@ -13,12 +13,12 @@
   },
   "background": {
     "persistent": true,
-    "page": "background.html"
+    "page": "src/background/background.html"
   },
   "content_scripts": [
     {
       "js": [
-        "content.js"
+        "src/content/content.js"
       ],
       "matches": [
         "<all_urls>"
@@ -26,6 +26,17 @@
       "run_at": "document_start"
     }
   ],
+  "options_ui": {
+    "page": "src/option/option.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "64": "icon.png",
+    "96": "icon.png"
+  },
   "permissions": [
     "<all_urls>",
     "activeTab",

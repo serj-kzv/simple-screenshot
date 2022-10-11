@@ -1,5 +1,5 @@
-import openAsPngFn from "./file/openAsPngFn.js";
-import saveAsPngFn from "./file/saveAsPngFn.js";
+import openAsPngFn from "../../lib/openAsPngFn.js";
+import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const css = {
