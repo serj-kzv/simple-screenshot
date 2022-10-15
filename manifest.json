@@ -13,12 +13,12 @@
   },
   "background": {
     "persistent": true,
-    "page": "src/background/background.html"
+    "page": "src/app/background/background.html"
   },
   "content_scripts": [
     {
       "js": [
-        "src/content/content.js"
+        "src/app/content/content.js"
       ],
       "matches": [
         "<all_urls>"

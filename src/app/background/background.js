@@ -12,7 +12,8 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
 
     await browser.tabs.insertCSS(css);
 
-    const {width, height} = await browser.tabs.sendMessage(tabId, null);
+    const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
+    console.log(scale);
     const screenshot = await browser.tabs.captureTab(
         tabId,
         {
@@ -22,7 +23,8 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
                 width,
                 height
             }
-        }
+        },
+        // scale
     );
 
     await browser.tabs.removeCSS(css);
