@@ -3,7 +3,7 @@ import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const css = {
-        file: './style.css',
+        file: '/src/app/background/style.css',
         allFrames: true,
         cssOrigin: 'user',
         matchAboutBlank: true,
