@@ -1,8 +1,8 @@
+import base64ToBlob from "../../lib/file/base64ToBlob.js";
 import openAsPngFn from "../../lib/file/openAsPngFn.js";
 import saveAsPngFn from "../../lib/file/saveAsPngFn.js";
-import base64ToBlob from "../../lib/file/base64ToBlob.js";
 
-const applyCssFn = async () => {
+browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const css = {
         file: '/style.css',
         allFrames: true,
@@ -12,13 +12,6 @@ const applyCssFn = async () => {
     };
 
     await browser.tabs.insertCSS(css);
-};
-const unapplyCssFn = async () => {
-    await browser.tabs.removeCSS(css);
-};
-
-browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
-    await applyCssFn();
 
     const {width, height} = await browser.tabs.sendMessage(tabId, null);
     const screenshot = await browser.tabs.captureTab(
@@ -33,7 +26,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
         }
     );
 
-    await unapplyCssFn();
+    await browser.tabs.removeCSS(css);
 
     const screenshotBlob = await base64ToBlob(screenshot);
 
