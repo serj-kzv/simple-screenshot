@@ -2,8 +2,9 @@ import openAsPngFn from "../../lib/openAsPngFn.js";
 import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
+    const rate = 10;
     const css = {
-        file: '/src/app/background/style.css',
+        code: `body { transform-origin: 0 0; transform: scale(${1 / rate}); }`,
         allFrames: true,
         cssOrigin: 'user',
         matchAboutBlank: true,
@@ -22,9 +23,9 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
                 y: 0,
                 width,
                 height
-            }
-        },
-        // scale
+            },
+            scale: scale * rate
+        }
     );
 
     await browser.tabs.removeCSS(css);
