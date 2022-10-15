@@ -2,9 +2,11 @@ import openAsPngFn from "../../lib/openAsPngFn.js";
 import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
-    const rate = 10;
+    const zoomOutRate = 100;
+    const qualityRate = 1;
+    const scaleQualityRate = zoomOutRate * qualityRate;
     const css = {
-        code: `body { transform-origin: 0 0; transform: scale(${1 / rate}); }`,
+        code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
         allFrames: true,
         cssOrigin: 'user',
         matchAboutBlank: true,
@@ -23,7 +25,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
                 width,
                 height
             },
-            scale: scale * rate
+            scale: scale * scaleQualityRate
         }
     );
 
