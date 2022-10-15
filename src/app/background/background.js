@@ -4,7 +4,6 @@ import saveAsPngFn from "../../lib/saveAsPngFn.js";
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const zoomOutRate = 100;
     const qualityRate = 1;
-    const scaleQualityRate = zoomOutRate * qualityRate;
     const css = {
         code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
         allFrames: true,
@@ -25,7 +24,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
                 width,
                 height
             },
-            scale: scale * scaleQualityRate
+            scale: scale * zoomOutRate * qualityRate
         }
     );
 
