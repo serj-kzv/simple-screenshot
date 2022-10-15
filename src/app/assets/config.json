@@ -1,0 +1,24 @@
+{
+  "activeProfile": "default",
+  "profile": [
+    {
+      "name": "default",
+      "option": {
+        "afterScreenshotAction": {
+          "open": true,
+          "save": true,
+          "copy": true
+        },
+        "transformPageOnScreenshot": {
+          "highQualityScreenshot": {
+            "enabled": true,
+            "level": 4
+          },
+          "fullPageSize": {
+            "enabled": true
+          }
+        }
+      }
+    }
+  ]
+}
