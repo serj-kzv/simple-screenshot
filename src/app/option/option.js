@@ -1,5 +1,4 @@
-import getOrDefaultFn from "../ext-lib/getOrDefaultFn.js";
-import CONSTANTS from "../common/CONSTANTS.js";
+import getOrDefaultFn from "../../lib/option/getOrDefaultFn";
 
 const CONTEXT = {
     bytes: document.getElementById(CONSTANTS.quantityOfBytesToDetectEncoding),
