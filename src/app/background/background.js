@@ -1,10 +1,9 @@
-import base64ToBlob from "../../lib/file/base64ToBlob.js";
-import openAsPngFn from "../../lib/file/openAsPngFn.js";
-import saveAsPngFn from "../../lib/file/saveAsPngFn.js";
+import openAsPngFn from "../../lib/openAsPngFn.js";
+import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     const css = {
-        file: '/style.css',
+        file: './style.css',
         allFrames: true,
         cssOrigin: 'user',
         matchAboutBlank: true,
@@ -28,7 +27,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
 
     await browser.tabs.removeCSS(css);
 
-    const screenshotBlob = await base64ToBlob(screenshot);
+    const screenshotBlob = await (await fetch(screenshot)).blob();
 
     await Promise.allSettled([
         openAsPngFn(screenshotBlob),
