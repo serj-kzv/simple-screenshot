@@ -26,10 +26,6 @@
       "run_at": "document_start"
     }
   ],
-  "options_ui": {
-    "page": "src/option/option.html",
-    "open_in_tab": true
-  },
   "icons": {
     "16": "icon.png",
     "32": "icon.png",
