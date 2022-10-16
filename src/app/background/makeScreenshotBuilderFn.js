@@ -1,7 +1,12 @@
 import openAsPngFn from '../lib/openAsPngFn.js';
 import saveAsPngFn from '../lib/saveAsPngFn.js';
 
-const makeScreenshotBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate, matchAboutBlank) => {
+const makeScreenshotBuilderFn = ({
+                                     zoomOutRate,
+                                     zoomOutRateDelay,
+                                     zoomOutRateMatchAboutBlank: matchAboutBlank,
+                                     qualityRate
+                                 }) => {
     return async tabId => {
         const css = {
             code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
