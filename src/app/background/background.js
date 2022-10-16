@@ -5,14 +5,14 @@ browser.browserAction.onClicked.addListener(async ({id}) => {
     const {
         zoomOutRate,
         zoomOutRateDelay,
-        qualityRate,
-        zoomOutRateMatchAboutBlank
+        zoomOutRateMatchAboutBlank,
+        qualityRate
     } = await getOptionFn();
     const makeScreenshotFn = makeScreenshotBuilderFn(
         zoomOutRate,
         zoomOutRateDelay,
-        qualityRate,
-        zoomOutRateMatchAboutBlank
+        zoomOutRateMatchAboutBlank,
+        qualityRate
     );
 
     await makeScreenshotFn(id);

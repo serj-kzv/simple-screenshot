@@ -5,10 +5,11 @@ const getOptionFn = async () => {
     const {
         zoomOutRate,
         zoomOutRateDelay,
-        qualityRate
+        zoomOutRateMatchAboutBlank,
+        qualityRate,
     } = option['profile'].find(({name}) => name === option['activeProfile']);
 
-    return {zoomOutRate, zoomOutRateDelay, qualityRate};
+    return {zoomOutRate, zoomOutRateDelay, zoomOutRateMatchAboutBlank, qualityRate};
 };
 
 export default getOptionFn;
