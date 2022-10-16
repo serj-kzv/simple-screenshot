@@ -8,7 +8,7 @@ const getOrDefaultFn = async () => {
             throw new Error('config is undefined');
         }
     } catch (e) {
-        config = await (await fetch(browser.runtime.getURL('/src/assets/config.json'))).json();
+        config = await (await fetch(browser.runtime.getURL('/src/app/assets/option.json'))).json();
         await browser.storage.local.set(config);
     }
 

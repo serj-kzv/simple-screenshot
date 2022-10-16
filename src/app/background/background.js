@@ -1,8 +1,22 @@
-import openAsPngFn from "../../lib/openAsPngFn.js";
-import saveAsPngFn from "../../lib/saveAsPngFn.js";
+import openAsPngFn from "../lib/openAsPngFn.js";
+import getOrDefaultFn from '../lib/option/getOrDefaultFn.js';
+import resetFn from '../lib/option/resetFn.js';
+import saveAsPngFn from "../lib/saveAsPngFn.js";
 
+const getOptionFn = async () => {
+    await resetFn();
+    const option = await getOrDefaultFn();
+    console.log(option);
+    const {
+        zoomOutRate,
+        zoomOutRateDelay,
+        qualityRate
+    } = option['profile'].find(({name}) => name === option['activeProfile']);
+
+    return {zoomOutRate, zoomOutRateDelay, qualityRate};
+};
 const onClickedListenerBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) => {
-    return async ({id: tabId}) => {
+    return async tabId => {
         const css = {
             code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
             allFrames: true,
@@ -36,7 +50,12 @@ const onClickedListenerBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) 
             openAsPngFn(screenshotBlob),
             saveAsPngFn(screenshotBlob, `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`)
         ]);
-    }
+    };
 };
 
-browser.browserAction.onClicked.addListener(onClickedListenerBuilderFn(4, 2000, 4));
+browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
+    const {zoomOutRate, zoomOutRateDelay, qualityRate} = await getOptionFn();
+    const handler = onClickedListenerBuilderFn(zoomOutRate, zoomOutRateDelay, qualityRate);
+
+    await handler(tabId);
+});

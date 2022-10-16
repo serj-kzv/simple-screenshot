@@ -1,0 +1,11 @@
+{
+  "activeProfile": "default",
+  "profile": [
+    {
+      "name": "default",
+      "zoomOutRate": 1,
+      "zoomOutRateDelay": 0,
+      "qualityRate": 1
+    }
+  ]
+}
