@@ -1,10 +1,10 @@
 import openAsPngFn from "../lib/openAsPngFn.js";
 import getOrDefaultFn from '../lib/option/getOrDefaultFn.js';
-import resetFn from '../lib/option/resetFn.js';
+import resetAndGetFn from '../lib/option/resetAndGetFn.js';
 import saveAsPngFn from "../lib/saveAsPngFn.js";
 
 const getOptionFn = async () => {
-    await resetFn();
+    await resetAndGetFn();
     const option = await getOrDefaultFn();
     console.log(option);
     const {

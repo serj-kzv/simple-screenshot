@@ -1,10 +1,9 @@
 import getOrDefaultFn from './getOrDefaultFn.js';
 
-const saveFn = async option => {
+const resetAndGetFn = async () => {
     await browser.storage.local.clear();
-    await browser.storage.local.set(option);
 
     return await getOrDefaultFn();
 };
 
-export default saveFn;
+export default resetAndGetFn;
