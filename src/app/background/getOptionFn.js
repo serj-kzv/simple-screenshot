@@ -2,7 +2,6 @@ import getOrDefaultFn from '../lib/option/getOrDefaultFn.js';
 
 const getOptionFn = async () => {
     const option = await getOrDefaultFn();
-    console.log(option);
     const {
         zoomOutRate,
         zoomOutRateDelay,
