@@ -1,9 +1,9 @@
 import getOptionFn from './getOptionFn.js';
-import onClickedListenerBuilderFn from './onClickedListenerBuilderFn.js';
+import makeScreenshotBuilderFn from './makeScreenshotBuilderFn.js';
 
 browser.browserAction.onClicked.addListener(async ({id}) => {
     const {zoomOutRate, zoomOutRateDelay, qualityRate} = await getOptionFn();
-    const handler = onClickedListenerBuilderFn(zoomOutRate, zoomOutRateDelay, qualityRate);
+    const makeScreenshotFn = makeScreenshotBuilderFn(zoomOutRate, zoomOutRateDelay, qualityRate);
 
-    await handler(id);
+    await makeScreenshotFn(id);
 });

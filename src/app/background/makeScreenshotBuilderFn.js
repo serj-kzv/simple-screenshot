@@ -1,7 +1,7 @@
 import openAsPngFn from '../lib/openAsPngFn.js';
 import saveAsPngFn from '../lib/saveAsPngFn.js';
 
-const onClickedListenerBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) => {
+const makeScreenshotBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) => {
     return async tabId => {
         const css = {
             code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
@@ -39,4 +39,4 @@ const onClickedListenerBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) 
     };
 };
 
-export default onClickedListenerBuilderFn;
+export default makeScreenshotBuilderFn;
