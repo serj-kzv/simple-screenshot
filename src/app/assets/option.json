@@ -5,6 +5,7 @@
       "name": "default",
       "zoomOutRate": 1,
       "zoomOutRateDelay": 0,
+      "zoomOutRateMatchAboutBlank": true,
       "qualityRate": 1
     }
   ]
