@@ -1,10 +1,8 @@
 import openAsPngFn from "../lib/openAsPngFn.js";
 import getOrDefaultFn from '../lib/option/getOrDefaultFn.js';
-import resetAndGetFn from '../lib/option/resetAndGetFn.js';
 import saveAsPngFn from "../lib/saveAsPngFn.js";
 
 const getOptionFn = async () => {
-    await resetAndGetFn();
     const option = await getOrDefaultFn();
     console.log(option);
     const {
@@ -53,9 +51,9 @@ const onClickedListenerBuilderFn = (zoomOutRate, zoomOutRateDelay, qualityRate) 
     };
 };
 
-browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
+browser.browserAction.onClicked.addListener(async ({id}) => {
     const {zoomOutRate, zoomOutRateDelay, qualityRate} = await getOptionFn();
     const handler = onClickedListenerBuilderFn(zoomOutRate, zoomOutRateDelay, qualityRate);
 
-    await handler(tabId);
+    await handler(id);
 });
