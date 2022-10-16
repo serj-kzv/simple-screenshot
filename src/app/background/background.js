@@ -2,7 +2,8 @@ import openAsPngFn from "../../lib/openAsPngFn.js";
 import saveAsPngFn from "../../lib/saveAsPngFn.js";
 
 browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
-    const zoomOutRate = 100;
+    const zoomOutRate = 4;
+    const zoomOutRateDelay = 2000;
     const qualityRate = 1;
     const css = {
         code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
@@ -13,6 +14,7 @@ browser.browserAction.onClicked.addListener(async ({id: tabId}) => {
     };
 
     await browser.tabs.insertCSS(css);
+    await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
 
     const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
     const screenshot = await browser.tabs.captureTab(
