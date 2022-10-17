@@ -3,6 +3,7 @@
   "profile": [
     {
       "name": "default",
+      "uuid": "c5a9539c-ae95-47bd-8a91-cf1ea6bb58d6",
       "openOptionOnInstall": true,
       "openOptionOnEnabled": true,
       "openOptionOnUpdate": true,

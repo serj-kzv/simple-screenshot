@@ -30,6 +30,11 @@
     "page": "src/app/option/option.html",
     "open_in_tab": true
   },
+  "web_accessible_resources": [
+    "bookmark/simpleScreenshotLevel1.html",
+    "bookmark/simpleScreenshotLevel2.html",
+    "bookmark/simpleScreenshotLevel4.html"
+  ],
   "icons": {
     "16": "icon.png",
     "32": "icon.png",

@@ -1,3 +1,4 @@
+import makeSimpleScreenshotBookmarksFn from '../background/makeSimpleScreenshotBookmarksFn.js';
 import getOrDefaultAsTxtFn from '../lib/option/getOrDefaultAsTxtFn.js';
 import resetAndGetAsTxtFn from '../lib/option/resetAndGetAsTxtFn.js';
 import saveTxtAndGetAsTxtFn from '../lib/option/saveTxtAndGetAsTxtFn.js';
@@ -19,6 +20,9 @@ const mainFn = async () => {
         } catch (e) {
             alert('json is incorrect');
         }
+    });
+    document.getElementById('makeBookmarks').addEventListener('click', async () => {
+        await makeSimpleScreenshotBookmarksFn();
     });
 };
 
