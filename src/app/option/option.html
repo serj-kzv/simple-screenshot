@@ -5,16 +5,18 @@
     <title>Open HTML option</title>
     <link rel="stylesheet" href="option.css">
 </head>
-<body>
-<div>
-    <button id="reset">Reset</button>
+<body class="flex-container">
+<div class="flex-item-stretch-flex-grow-0">
+    <div class="inline-block">
+        <button id="reset">Reset</button>
+    </div>
+    <div class="inline-block">
+        <button id="save">Save</button>
+    </div>
 </div>
-<div>
-    <button id="save">Save</button>
-</div>
-<div>
+<div class="flex-item-stretch-flex-grow-1">
     <label for="option"></label>
-    <textarea id="option" cols="30" rows="10" spellcheck="false"></textarea>
+    <textarea id="option" class="wide-textarea" spellcheck="false"></textarea>
 </div>
 <script src="option.js" type="module"></script>
 </body>

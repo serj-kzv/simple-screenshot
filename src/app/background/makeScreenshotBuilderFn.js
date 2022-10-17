@@ -2,6 +2,8 @@ import openAsPngFn from '../lib/openAsPngFn.js';
 import saveAsPngFn from '../lib/saveAsPngFn.js';
 
 const makeScreenshotBuilderFn = ({
+                                     openScreenshotInNewTab,
+                                     downloadScreenshot,
                                      zoomOutRate,
                                      zoomOutRateDelay,
                                      zoomOutRateMatchAboutBlank: matchAboutBlank,
@@ -36,11 +38,19 @@ const makeScreenshotBuilderFn = ({
         await browser.tabs.removeCSS(css);
 
         const screenshotBlob = await (await fetch(screenshot)).blob();
+        const screenshotActions = [];
 
-        await Promise.allSettled([
-            openAsPngFn(screenshotBlob),
-            saveAsPngFn(screenshotBlob, `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`)
-        ]);
+        if (openScreenshotInNewTab) {
+            screenshotActions.push(openAsPngFn(screenshotBlob));
+        }
+        if (downloadScreenshot) {
+            screenshotActions.push(saveAsPngFn(
+                screenshotBlob,
+                `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
+            ));
+        }
+
+        await Promise.allSettled(screenshotActions);
     };
 };
 

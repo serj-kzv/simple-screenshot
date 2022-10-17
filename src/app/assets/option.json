@@ -3,6 +3,11 @@
   "profile": [
     {
       "name": "default",
+      "openOptionOnInstall": true,
+      "openOptionOnEnabled": true,
+      "openOptionOnUpdate": true,
+      "openScreenshotInNewTab": true,
+      "downloadScreenshot": true,
       "zoomOutRate": 1,
       "zoomOutRateDelay": 0,
       "zoomOutRateMatchAboutBlank": true,
