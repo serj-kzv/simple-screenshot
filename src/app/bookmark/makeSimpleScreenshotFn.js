@@ -9,14 +9,15 @@ const makeSimpleScreenshotFn = async qualityRate => {
     const makeScreenshotFn = makeScreenshotBuilderFn(option);
 
     await browser.tabs.query({active: false}, async (tabs) => {
-        let tab = tabs.reduce((previous, current) => {
-            return previous.lastAccessed > current.lastAccessed ? previous : current;
-        });
-        // previous tab
-        console.log(tab);
+        const {id: previousTabId} = tabs.reduce((previous, current) =>
+            previous.lastAccessed > current.lastAccessed ? previous : current);
+        const currentTabId = (await browser.tabs.getCurrent()).id;
 
-        await makeScreenshotFn(tab.id);
-        await browser.tabs.update(tab.id, {active: true});
+        await makeScreenshotFn(previousTabId);
+        await Promise.allSettled([
+            browser.tabs.remove(currentTabId),
+            browser.tabs.update(previousTabId, {active: true})
+        ]);
     });
 
 };
