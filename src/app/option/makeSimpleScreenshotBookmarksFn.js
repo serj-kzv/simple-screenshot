@@ -1,4 +1,4 @@
-import getOptionFn from './getOptionFn.js';
+import getOptionFn from '../background/getOptionFn.js';
 
 const makeSimpleScreenshotBookmarksFn = async () => {
     const {uuid} = await getOptionFn();
