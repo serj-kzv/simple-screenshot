@@ -16,10 +16,10 @@ browser.management.onInstalled.addListener(async () => {
     }
 });
 browser.runtime.onInstalled.addListener(async ({reason}) => {
-    if (reason === 'install' || reason === 'update') {
-        const {openOptionOnInstall, openOptionOnUpdate} = await getOptionFn();
+    if (reason === 'update') {
+        const {openOptionOnUpdate} = await getOptionFn();
 
-        if (openOptionOnInstall || openOptionOnUpdate) {
+        if (openOptionOnUpdate) {
             await browser.runtime.openOptionsPage();
         }
     }
