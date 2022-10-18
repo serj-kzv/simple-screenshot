@@ -34,7 +34,10 @@
   "web_accessible_resources": [
     "bookmark/simpleScreenshotLevel1.html",
     "bookmark/simpleScreenshotLevel2.html",
-    "bookmark/simpleScreenshotLevel4.html"
+    "bookmark/simpleScreenshotLevel4.html",
+    "bookmark/simpleScreenshotLevel6.html",
+    "bookmark/simpleScreenshotLevel8.html",
+    "bookmark/simpleScreenshotLevel10.html"
   ],
   "icons": {
     "16": "icon.png",
