@@ -18,39 +18,42 @@ const makeScreenshotBuilderFn = ({
             runAt: 'document_start'
         };
 
-        await browser.tabs.insertCSS(css);
-        await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
+        try {
+            await browser.tabs.insertCSS(css);
+            await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
 
-        const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
-        const screenshot = await browser.tabs.captureTab(
-            tabId,
-            {
-                rect: {
-                    x: 0,
-                    y: 0,
-                    width,
-                    height
-                },
-                scale: scale * zoomOutRate * qualityRate
+            const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
+            const screenshot = await browser.tabs.captureTab(
+                tabId,
+                {
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        width,
+                        height
+                    },
+                    scale: scale * zoomOutRate * qualityRate
+                }
+            );
+
+            await browser.tabs.removeCSS(css);
+
+            const screenshotBlob = await (await fetch(screenshot)).blob();
+            const screenshotActions = [];
+
+            if (openScreenshotInNewTab) {
+                screenshotActions.push(openAsPngFn(screenshotBlob));
             }
-        );
-
-        await browser.tabs.removeCSS(css);
-
-        const screenshotBlob = await (await fetch(screenshot)).blob();
-        const screenshotActions = [];
-
-        if (openScreenshotInNewTab) {
-            screenshotActions.push(openAsPngFn(screenshotBlob));
+            if (downloadScreenshot) {
+                screenshotActions.push(saveAsPngFn(
+                    screenshotBlob,
+                    `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
+                ));
+            }
+            await Promise.allSettled(screenshotActions);
+        } catch (e) {
+            await browser.tabs.removeCSS(css);
         }
-        if (downloadScreenshot) {
-            screenshotActions.push(saveAsPngFn(
-                screenshotBlob,
-                `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
-            ));
-        }
-
-        await Promise.allSettled(screenshotActions);
     };
 };
 

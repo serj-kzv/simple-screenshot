@@ -44,7 +44,7 @@ const makeSimpleScreenshotBookmarksFn = async () => {
     });
     await browser.bookmarks.create({
         parentId,
-        title: title4,
+        title: title4_5,
         url: browser.runtime.getURL("src/app/bookmark/simpleScreenshotLevel4_5.html"),
     });
     await browser.bookmarks.create({
