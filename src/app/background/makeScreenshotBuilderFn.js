@@ -25,6 +25,10 @@ const makeScreenshotBuilderFn = ({
             const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
             let screenshot;
 
+            console.log(height)
+            if (height > 32767) {
+                console.log('height more then 32767px')
+            }
             try {
                 screenshot = await browser.tabs.captureTab(
                     tabId,
