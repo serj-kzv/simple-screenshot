@@ -5,7 +5,7 @@ const makeSimpleScreenshotBookmarksFn = async () => {
     const title = `Folder for Simple Screenshot Extension Bookmark - ${uuid}`;
     const title1 = `SmplScrsht X1 Simple Screenshot Extension Bookmark - ${uuid}`;
     const title2 = `SmplScrsht X2 Simple Screenshot Extension Bookmark - ${uuid}`;
-    const title4 = `SmplScrsht X2 Simple Screenshot Extension Bookmark - ${uuid}`;
+    const title4 = `SmplScrsht X4 Simple Screenshot Extension Bookmark - ${uuid}`;
 
     await Promise.allSettled([
         ...(await browser.bookmarks.search({title: title1})).map(async ({id}) => await browser.bookmarks.remove(id)),
