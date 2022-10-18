@@ -6,17 +6,17 @@ import makeSimpleScreenshotBookmarksFn from './makeSimpleScreenshotBookmarksFn.j
 const mainFn = async () => {
     const option = document.getElementById('option');
 
-    option.value = JSON.stringify(await getOrDefaultFn(), null, 4);
+    option.value = JSON.stringify(await getOrDefaultFn(), null, 2);
     document.getElementById('reset').addEventListener('click', async () => {
         try {
-            option.value = JSON.stringify(await resetAndGetFn(), null, 4);
+            option.value = JSON.stringify(await resetAndGetFn(), null, 2);
         } catch (e) {
             alert('json is incorrect');
         }
     });
     document.getElementById('save').addEventListener('click', async () => {
         try {
-            option.value = JSON.stringify(await saveTxtAndGetFn(option.value), null, 4);
+            option.value = JSON.stringify(await saveTxtAndGetFn(option.value), null, 2);
         } catch (e) {
             alert('json is incorrect');
         }
