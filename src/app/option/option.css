@@ -38,6 +38,11 @@ body,
     outline: none;
 }
 
+button:hover {
+    background: white;
+    color: black;
+}
+
 .inline-block {
     display: inline-block;
 }
