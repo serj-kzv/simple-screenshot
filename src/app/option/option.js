@@ -1,7 +1,7 @@
+import getOrDefaultFn from "../lib/option/getOrDefaultFn.js";
+import resetAndGetFn from "../lib/option/resetAndGetFn.js";
+import saveTxtAndGetFn from "../lib/option/saveTxtAndGetFn.js";
 import makeSimpleScreenshotBookmarksFn from './makeSimpleScreenshotBookmarksFn.js';
-import saveTxtAndGetFn from "../lib/option/saveTxtAndGetFn";
-import getOrDefaultFn from "../lib/option/getOrDefaultFn";
-import resetAndGetFn from "../lib/option/resetAndGetFn";
 
 const mainFn = async () => {
     const option = document.getElementById('option');
