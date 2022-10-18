@@ -23,18 +23,24 @@ const makeScreenshotBuilderFn = ({
             await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
 
             const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
-            const screenshot = await browser.tabs.captureTab(
-                tabId,
-                {
-                    rect: {
-                        x: 0,
-                        y: 0,
-                        width,
-                        height
-                    },
-                    scale: scale * zoomOutRate * qualityRate
-                }
-            );
+            let screenshot;
+
+            try {
+                screenshot = await browser.tabs.captureTab(
+                    tabId,
+                    {
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            width,
+                            height
+                        },
+                        scale: scale * zoomOutRate * qualityRate
+                    }
+                );
+            } catch (e) {
+                console.error(e);
+            }
 
             await browser.tabs.removeCSS(tabId, css);
 

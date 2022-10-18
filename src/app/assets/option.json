@@ -9,7 +9,7 @@
       "openOptionOnUpdate": true,
       "openScreenshotInNewTab": true,
       "downloadScreenshot": true,
-      "zoomOutRate": 1,
+      "zoomOutRate": 1000,
       "zoomOutRateDelay": 0,
       "zoomOutRateMatchAboutBlank": true,
       "qualityRate": 1
