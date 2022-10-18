@@ -19,7 +19,7 @@ const makeScreenshotBuilderFn = ({
         };
 
         try {
-            await browser.tabs.insertCSS(css);
+            await browser.tabs.insertCSS(tabId, css);
             await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
 
             const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
@@ -36,7 +36,7 @@ const makeScreenshotBuilderFn = ({
                 }
             );
 
-            await browser.tabs.removeCSS(css);
+            await browser.tabs.removeCSS(tabId, css);
 
             const screenshotBlob = await (await fetch(screenshot)).blob();
             const screenshotActions = [];
@@ -52,7 +52,7 @@ const makeScreenshotBuilderFn = ({
             }
             await Promise.allSettled(screenshotActions);
         } catch (e) {
-            await browser.tabs.removeCSS(css);
+            await browser.tabs.removeCSS(tabId, css);
         }
     };
 };

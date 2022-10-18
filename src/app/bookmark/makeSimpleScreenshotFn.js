@@ -14,10 +14,10 @@ const makeSimpleScreenshotFn = async qualityRate => {
         const currentTabId = (await browser.tabs.getCurrent()).id;
 
         await makeScreenshotFn(previousTabId);
-        await Promise.allSettled([
-            browser.tabs.remove(currentTabId),
-            browser.tabs.update(previousTabId, {active: true})
-        ]);
+        // await Promise.allSettled([
+        //     browser.tabs.remove(currentTabId),
+        //     browser.tabs.update(previousTabId, {active: true})
+        // ]);
     });
 
 };
