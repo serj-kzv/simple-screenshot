@@ -53,7 +53,8 @@ const makeScreenshotBuilderFn = ({
                     )
                 );
             const base64Screenshots = await Promise.allSettled(screenshotPromises);
-            const screenshotBlobPromises = base64Screenshots.map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
+            const screenshotBlobPromises = base64Screenshots
+                .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
             const screenshotBlobs = await Promise.allSettled(screenshotBlobPromises);
             const openScreenshotInNewTabActions = openScreenshotInNewTab
                 ? screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
@@ -70,8 +71,9 @@ const makeScreenshotBuilderFn = ({
                 ...downloadScreenshotActions
             ]);
         } catch (e) {
-            await browser.tabs.removeCSS(tabId, css);
+            console.error(e);
         }
+        await browser.tabs.removeCSS(tabId, css);
     };
 };
 
