@@ -12,7 +12,9 @@
       "zoomOutRate": 1000,
       "zoomOutRateDelay": 0,
       "zoomOutRateMatchAboutBlank": true,
-      "qualityRate": 1
+      "qualityRate": 1,
+      "avoidBug1784915": true,
+      "avoidBug1784915CanvasHeightStep": 32767
     }
   ]
 }

@@ -8,7 +8,8 @@ const makeScreenshotBuilderFn = ({
                                      zoomOutRate,
                                      zoomOutRateDelay,
                                      zoomOutRateMatchAboutBlank: matchAboutBlank,
-                                     qualityRate
+                                     qualityRate,
+                                     avoidBug1784915CanvasHeightStep
                                  }) => {
     return async tabId => {
         const css = {
@@ -27,17 +28,15 @@ const makeScreenshotBuilderFn = ({
 
             console.log(height);
 
-            // const maxSegmentHeight = 32767;
-            const maxSegmentHeight = 10000;
-            const segmentLength = Math.floor(height / maxSegmentHeight);
+            const segmentLength = Math.floor(height / avoidBug1784915CanvasHeightStep);
             const screenshotPromises = Array(segmentLength)
                 .fill()
                 .map((_, i) => i)
                 .map(async i => await captureTabScreenshotFn(
                     tabId,
-                    i * maxSegmentHeight,
+                    i * avoidBug1784915CanvasHeightStep,
                     width,
-                    maxSegmentHeight,
+                    avoidBug1784915CanvasHeightStep,
                     scale,
                     zoomOutRate,
                     qualityRate
@@ -47,9 +46,9 @@ const makeScreenshotBuilderFn = ({
                     0,
                     await captureTabScreenshotFn(
                         tabId,
-                        segmentLength * maxSegmentHeight,
+                        segmentLength * avoidBug1784915CanvasHeightStep,
                         width,
-                        height % maxSegmentHeight,
+                        height % avoidBug1784915CanvasHeightStep,
                         scale,
                         zoomOutRate,
                         qualityRate
