@@ -12,6 +12,7 @@ const makeScreenshotBuilderFn = ({
                                      avoidBug1784915CanvasHeightStep
                                  }) => {
     return async tabId => {
+        console.log('avoidBug1784915CanvasHeightStep', avoidBug1784915CanvasHeightStep);
         const css = {
             code: `body { transform-origin: 0 0; transform: scale(${1 / zoomOutRate}); }`,
             allFrames: true,
@@ -28,12 +29,18 @@ const makeScreenshotBuilderFn = ({
 
             console.log('height', height);
 
-            const segmentLength = Math.floor(height / avoidBug1784915CanvasHeightStep);
+            const segment = height / avoidBug1784915CanvasHeightStep;
+            console.log('segment', segment);
+            const segmentLength = Math.floor(segment);
             console.log('segmentLength', segmentLength);
-            const screenshotPromises = Array(segmentLength)
-                .fill()
-                .map((_, i) => i)
-                .map(async i => await captureTabScreenshotFn(
+            const segmentRange = Array(segmentLength).fill().map((_, i) => i);
+
+            console.log('segmentRange', segmentRange);
+
+            const screenshotPromises = segmentRange.map(async i => {
+                console.log('captureTabScreenshotFn i = ', i);
+
+                const captureTabScreenshotPromise = await captureTabScreenshotFn(
                     tabId,
                     i * avoidBug1784915CanvasHeightStep,
                     width,
@@ -41,13 +48,21 @@ const makeScreenshotBuilderFn = ({
                     scale,
                     zoomOutRate,
                     qualityRate
-                ));
+                );
+
+                console.log('captureTabScreenshotPromise', captureTabScreenshotPromise);
+
+                return captureTabScreenshotPromise;
+            });
+            const segmentRemainder = height % avoidBug1784915CanvasHeightStep;
+
+            console.log('segmentRemainder', segmentRemainder);
 
             screenshotPromises.push(await captureTabScreenshotFn(
                 tabId,
                 segmentLength * avoidBug1784915CanvasHeightStep,
                 width,
-                height % avoidBug1784915CanvasHeightStep,
+                segmentRemainder,
                 scale,
                 zoomOutRate,
                 qualityRate
@@ -75,10 +90,11 @@ const makeScreenshotBuilderFn = ({
 
             await Promise.all([
                 ...openScreenshotInNewTabActions,
-                ...downloadScreenshotActions
+                // ...downloadScreenshotActions
             ]);
         } catch (e) {
             console.error(e);
+            throw e;
         }
         await browser.tabs.removeCSS(tabId, css);
     };
