@@ -55,23 +55,20 @@ const makeScreenshotBuilderFn = ({
             const base64Screenshots = await Promise.allSettled(screenshotPromises);
             const screenshotBlobPromises = base64Screenshots.map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
             const screenshotBlobs = await Promise.allSettled(screenshotBlobPromises);
-            let screenshotActions = [];
+            const openScreenshotInNewTabActions = openScreenshotInNewTab
+                ? screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
+                : [];
+            const downloadScreenshotActions = downloadScreenshot
+                ? screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
+                    screenshotBlob,
+                    `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
+                ))
+                : [];
 
-            if (openScreenshotInNewTab) {
-                screenshotActions = [
-                    ...screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
-                ];
-            }
-            if (downloadScreenshot) {
-                screenshotActions = [
-                    ...screenshotActions,
-                    ...screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
-                        screenshotBlob,
-                        `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
-                    ))
-                ];
-            }
-            await Promise.allSettled(screenshotActions);
+            await Promise.allSettled([
+                ...openScreenshotInNewTabActions,
+                ...downloadScreenshotActions
+            ]);
         } catch (e) {
             await browser.tabs.removeCSS(tabId, css);
         }
