@@ -26,9 +26,10 @@ const makeScreenshotBuilderFn = ({
 
             const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
 
-            console.log(height);
+            console.log('height', height);
 
             const segmentLength = Math.floor(height / avoidBug1784915CanvasHeightStep);
+            console.log('segmentLength', segmentLength);
             const screenshotPromises = Array(segmentLength)
                 .fill()
                 .map((_, i) => i)
@@ -40,35 +41,39 @@ const makeScreenshotBuilderFn = ({
                     scale,
                     zoomOutRate,
                     qualityRate
-                ))
-                .splice(
-                    segmentLength,
-                    0,
-                    await captureTabScreenshotFn(
-                        tabId,
-                        segmentLength * avoidBug1784915CanvasHeightStep,
-                        width,
-                        height % avoidBug1784915CanvasHeightStep,
-                        scale,
-                        zoomOutRate,
-                        qualityRate
-                    )
-                );
-            const base64Screenshots = await Promise.allSettled(screenshotPromises);
+                ));
+
+            screenshotPromises.push(await captureTabScreenshotFn(
+                tabId,
+                segmentLength * avoidBug1784915CanvasHeightStep,
+                width,
+                height % avoidBug1784915CanvasHeightStep,
+                scale,
+                zoomOutRate,
+                qualityRate
+            ));
+
+            console.log('screenshotPromises', screenshotPromises);
+            const base64Screenshots = await Promise.all(screenshotPromises);
+            console.log('base64Screenshots', base64Screenshots);
             const screenshotBlobPromises = base64Screenshots
                 .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
-            const screenshotBlobs = await Promise.allSettled(screenshotBlobPromises);
+            console.log('screenshotBlobPromises', screenshotBlobPromises);
+            const screenshotBlobs = await Promise.all(screenshotBlobPromises);
+            console.log('screenshotBlobs', screenshotBlobs);
             const openScreenshotInNewTabActions = openScreenshotInNewTab
                 ? screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
                 : [];
+            console.log('openScreenshotInNewTabActions', openScreenshotInNewTabActions);
             const downloadScreenshotActions = downloadScreenshot
                 ? screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
                     screenshotBlob,
                     `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
                 ))
                 : [];
+            console.log('downloadScreenshotActions', downloadScreenshotActions);
 
-            await Promise.allSettled([
+            await Promise.all([
                 ...openScreenshotInNewTabActions,
                 ...downloadScreenshotActions
             ]);
