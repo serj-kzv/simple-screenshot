@@ -1,4 +1,4 @@
-const captureTabScreenshotFn = async (y, width, height, scale, zoomOutRate, qualityRate) => {
+const captureTabScreenshotFn = async (tabId, y, width, height, scale, zoomOutRate, qualityRate) => {
     return await browser.tabs.captureTab(
         tabId,
         {

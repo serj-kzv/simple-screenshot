@@ -27,12 +27,14 @@ const makeScreenshotBuilderFn = ({
 
             console.log(height);
 
-            const maxSegmentHeight = 32767;
+            // const maxSegmentHeight = 32767;
+            const maxSegmentHeight = 10000;
             const segmentLength = Math.floor(height / maxSegmentHeight);
             const screenshotPromises = Array(segmentLength)
                 .fill()
                 .map((_, i) => i)
                 .map(async i => await captureTabScreenshotFn(
+                    tabId,
                     i * maxSegmentHeight,
                     width,
                     maxSegmentHeight,
@@ -44,6 +46,7 @@ const makeScreenshotBuilderFn = ({
                     segmentLength,
                     0,
                     await captureTabScreenshotFn(
+                        tabId,
                         segmentLength * maxSegmentHeight,
                         width,
                         height % maxSegmentHeight,
