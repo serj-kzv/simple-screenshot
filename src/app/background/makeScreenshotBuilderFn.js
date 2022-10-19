@@ -1,5 +1,6 @@
 import openAsPngFn from '../lib/openAsPngFn.js';
 import saveAsPngFn from '../lib/saveAsPngFn.js';
+import captureTabScreenshotFn from './captureTabScreenshotFn.js';
 
 const makeScreenshotBuilderFn = ({
                                      openScreenshotInNewTab,
@@ -23,42 +24,52 @@ const makeScreenshotBuilderFn = ({
             await new Promise(resolve => setTimeout(resolve, zoomOutRateDelay));
 
             const {width, height, scale} = await browser.tabs.sendMessage(tabId, null);
-            let screenshot;
 
-            console.log(height)
-            if (height > 32767) {
-                console.log('height more then 32767px')
-            }
-            try {
-                screenshot = await browser.tabs.captureTab(
-                    tabId,
-                    {
-                        rect: {
-                            x: 0,
-                            y: 0,
-                            width,
-                            height
-                        },
-                        scale: scale * zoomOutRate * qualityRate
-                    }
+            console.log(height);
+
+            const maxSegmentHeight = 32767;
+            const segmentLength = Math.floor(height / maxSegmentHeight);
+            const screenshotPromises = Array(segmentLength)
+                .fill()
+                .map((_, i) => i)
+                .map(async i => await captureTabScreenshotFn(
+                    i * maxSegmentHeight,
+                    width,
+                    maxSegmentHeight,
+                    scale,
+                    zoomOutRate,
+                    qualityRate
+                ))
+                .splice(
+                    segmentLength,
+                    0,
+                    await captureTabScreenshotFn(
+                        segmentLength * maxSegmentHeight,
+                        width,
+                        height % maxSegmentHeight,
+                        scale,
+                        zoomOutRate,
+                        qualityRate
+                    )
                 );
-            } catch (e) {
-                console.error(e);
-            }
-
-            await browser.tabs.removeCSS(tabId, css);
-
-            const screenshotBlob = await (await fetch(screenshot)).blob();
-            const screenshotActions = [];
+            const base64Screenshots = await Promise.allSettled(screenshotPromises);
+            const screenshotBlobPromises = base64Screenshots.map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
+            const screenshotBlobs = await Promise.allSettled(screenshotBlobPromises);
+            let screenshotActions = [];
 
             if (openScreenshotInNewTab) {
-                screenshotActions.push(openAsPngFn(screenshotBlob));
+                screenshotActions = [
+                    ...screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
+                ];
             }
             if (downloadScreenshot) {
-                screenshotActions.push(saveAsPngFn(
-                    screenshotBlob,
-                    `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
-                ));
+                screenshotActions = [
+                    ...screenshotActions,
+                    ...screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
+                        screenshotBlob,
+                        `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
+                    ))
+                ];
             }
             await Promise.allSettled(screenshotActions);
         } catch (e) {
