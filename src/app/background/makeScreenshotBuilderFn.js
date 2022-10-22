@@ -1,6 +1,4 @@
 import makeImageFn from '../lib/makeImageFn.js';
-import openAsPngFn from '../lib/openAsPngFn.js';
-import saveAsPngFn from '../lib/saveAsPngFn.js';
 import captureTabScreenshotFn from './captureTabScreenshotFn.js';
 
 const makeScreenshotBuilderFn = ({
@@ -86,6 +84,13 @@ const makeScreenshotBuilderFn = ({
                 return context.getImageData(0, 0, canvas.width, canvas.height).data;
             }));
             console.log('pixels', pixels);
+
+
+            const tgaImg = new TGA({width: 300, height: 300, imageType: TGA.Type.RLE_RGB});
+            tgaImg.setImageData(pixels[0]);
+
+            console.log('tgaImg', tgaImg);
+            console.log('tgaImg', tgaImg.getBlobURL());
 
             // const screenshotBlobPromises = base64Screenshots
             //     .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
