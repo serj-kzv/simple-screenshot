@@ -1,3 +1,4 @@
+import makeImageFn from '../lib/makeImageFn.js';
 import openAsPngFn from '../lib/openAsPngFn.js';
 import saveAsPngFn from '../lib/saveAsPngFn.js';
 import captureTabScreenshotFn from './captureTabScreenshotFn.js';
@@ -71,27 +72,46 @@ const makeScreenshotBuilderFn = ({
             console.log('screenshotPromises', screenshotPromises);
             const base64Screenshots = await Promise.all(screenshotPromises);
             console.log('base64Screenshots', base64Screenshots);
-            const screenshotBlobPromises = base64Screenshots
-                .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
-            console.log('screenshotBlobPromises', screenshotBlobPromises);
-            const screenshotBlobs = await Promise.all(screenshotBlobPromises);
-            console.log('screenshotBlobs', screenshotBlobs);
-            const openScreenshotInNewTabActions = openScreenshotInNewTab
-                ? screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
-                : [];
-            console.log('openScreenshotInNewTabActions', openScreenshotInNewTabActions);
-            const downloadScreenshotActions = downloadScreenshot
-                ? screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
-                    screenshotBlob,
-                    `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
-                ))
-                : [];
-            console.log('downloadScreenshotActions', downloadScreenshotActions);
 
-            await Promise.all([
-                ...openScreenshotInNewTabActions,
-                // ...downloadScreenshotActions
-            ]);
+            const images = await Promise.all(base64Screenshots.map(async base64Screenshot => await makeImageFn(base64Screenshot)));
+            console.log('pixels', images);
+            const pixels = await Promise.all(images.map(async image => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                canvas.height = image.naturalHeight;
+                canvas.width = image.naturalWidth;
+                context.drawImage(image, 0, 0);
+
+                return context.getImageData(0, 0, canvas.width, canvas.height).data;
+            }));
+            console.log('pixels', pixels);
+
+            // const screenshotBlobPromises = base64Screenshots
+            //     .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
+            // console.log('screenshotBlobPromises', screenshotBlobPromises);
+            // const screenshotBlobs = await Promise.all(screenshotBlobPromises);
+            // console.log('screenshotBlobs', screenshotBlobs);
+            // const screenshotBlob = new Blob(screenshotBlobs, {type: "image/png"});
+            // console.log('screenshotBlob', screenshotBlob);
+            // await openAsPngFn(screenshotBlob);
+            //
+            // const openScreenshotInNewTabActions = openScreenshotInNewTab
+            //     ? screenshotBlobs.map(async screenshotBlob => await openAsPngFn(screenshotBlob))
+            //     : [];
+            // console.log('openScreenshotInNewTabActions', openScreenshotInNewTabActions);
+            // const downloadScreenshotActions = downloadScreenshot
+            //     ? screenshotBlobs.map(async screenshotBlob => await saveAsPngFn(
+            //         screenshotBlob,
+            //         `screenshot_${new Date().toISOString().replaceAll(':', '_')}.png`
+            //     ))
+            //     : [];
+            // console.log('downloadScreenshotActions', downloadScreenshotActions);
+            //
+            // await Promise.all([
+            //     ...openScreenshotInNewTabActions,
+            //     // ...downloadScreenshotActions
+            // ]);
         } catch (e) {
             console.error(e);
             throw e;
