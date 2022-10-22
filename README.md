@@ -18,4 +18,7 @@ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#maximum_canvas_
 * https://bugs.chromium.org/p/skia/issues/detail?id=2122
 
 # External
-https://github.com/lukehaas/css-loaders
+* https://github.com/lukehaas/css-loaders
+* https://github.com/nodeca/pako
+* https://github.com/photopea/UZIP.js
+* https://github.com/photopea/UPNG.js

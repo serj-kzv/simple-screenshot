@@ -1,4 +1,5 @@
 import makeImageFn from '../lib/makeImageFn.js';
+import openAsPngFn from '../lib/openAsPngFn.js';
 import captureTabScreenshotFn from './captureTabScreenshotFn.js';
 
 const makeScreenshotBuilderFn = ({
@@ -73,24 +74,30 @@ const makeScreenshotBuilderFn = ({
 
             const images = await Promise.all(base64Screenshots.map(async base64Screenshot => await makeImageFn(base64Screenshot)));
             console.log('pixels', images);
-            const pixels = await Promise.all(images.map(async image => {
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
+            const pixels = await Promise.all(
+                images
+                    .map(async image => {
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
 
-                canvas.height = image.naturalHeight;
-                canvas.width = image.naturalWidth;
-                context.drawImage(image, 0, 0);
+                        canvas.height = image.naturalHeight;
+                        canvas.width = image.naturalWidth;
+                        context.drawImage(image, 0, 0);
 
-                return context.getImageData(0, 0, canvas.width, canvas.height).data;
-            }));
+                        return context.getImageData(0, 0, canvas.width, canvas.height).data;
+                    })
+            );
             console.log('pixels', pixels);
 
+            const pixelsFlat = Uint8ClampedArray.from(pixels.reduce((a, b) => [...a, ...b], []));
 
-            const tgaImg = new TGA({width: 300, height: 300, imageType: TGA.Type.RLE_RGB});
-            tgaImg.setImageData(pixels[0]);
+            console.log('pixelsFlat', pixelsFlat);
 
-            console.log('tgaImg', tgaImg);
-            console.log('tgaImg', tgaImg.getBlobURL());
+            const png = UPNG.encode([pixelsFlat.buffer], width, height, 0);
+
+            console.log('png', png);
+
+            await openAsPngFn(png);
 
             // const screenshotBlobPromises = base64Screenshots
             //     .map(async base64Screenshot => await (await fetch(base64Screenshot)).blob());
