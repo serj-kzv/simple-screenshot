@@ -74,26 +74,24 @@ const makeScreenshotBuilderFn = ({
 
             const images = await Promise.all(base64Screenshots.map(async base64Screenshot => await makeImageFn(base64Screenshot)));
             console.log('pixels', images);
-            const pixels = await Promise.all(
-                images
-                    .map(async image => {
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
 
-                        canvas.height = image.naturalHeight;
-                        canvas.width = image.naturalWidth;
-                        context.drawImage(image, 0, 0);
+            const pixelsInfo = await Promise.all(images.map(async image => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const {naturalHeight: height, naturalWidth: width} = image;
 
-                        return context.getImageData(0, 0, canvas.width, canvas.height).data;
-                    })
-            );
-            console.log('pixels', pixels);
+                context.drawImage(image, 0, 0);
 
+                return {pixels: context.getImageData(0, 0, width, height).data, width, height};
+            }));
+            console.log('pixelsInfo', pixelsInfo);
+
+            const pixels = pixelsInfo.map(info => info.pixels);
             const pixelsFlat = Uint8ClampedArray.from(pixels.reduce((a, b) => [...a, ...b], []));
 
             console.log('pixelsFlat', pixelsFlat);
 
-            const png = UPNG.encode([pixels[0].buffer], width, height, 0);
+            const png = UPNG.encode([pixelsInfo[0].buffer], pixelsInfo[0].width, pixelsInfo[0].height, 0);
             // const png = UPNG.encode([(new Uint8Array([0,0,0,255, 255,0,0,255])).buffer], 2, 1, 0);
 
             console.log('png', png);
