@@ -93,7 +93,8 @@ const makeScreenshotBuilderFn = ({
 
             console.log('pixelsFlat', pixelsFlat);
 
-            const png = UPNG.encode([pixelsFlat.buffer], width, height, 0);
+            const png = UPNG.encode([pixels[0].buffer], width, height, 0);
+            // const png = UPNG.encode([(new Uint8Array([0,0,0,255, 255,0,0,255])).buffer], 2, 1, 0);
 
             console.log('png', png);
 
