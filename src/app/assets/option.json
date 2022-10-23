@@ -14,7 +14,8 @@
       "zoomOutRateMatchAboutBlank": true,
       "qualityRate": 1,
       "avoidBug1784915": true,
-      "avoidBug1784915CanvasHeightStep": 15000
+      "avoidBug1784915CanvasHeightStep": 15000,
+      "pngCompressRate": 0
     }
   ]
 }

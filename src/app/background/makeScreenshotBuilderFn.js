@@ -9,7 +9,8 @@ const makeScreenshotBuilderFn = ({
                                      zoomOutRateDelay,
                                      zoomOutRateMatchAboutBlank: matchAboutBlank,
                                      qualityRate,
-                                     avoidBug1784915CanvasHeightStep
+                                     avoidBug1784915CanvasHeightStep,
+                                     pngCompressRate
                                  }) => {
     return async tabId => {
         console.log('avoidBug1784915CanvasHeightStep', avoidBug1784915CanvasHeightStep);
@@ -58,7 +59,7 @@ const makeScreenshotBuilderFn = ({
 
             console.log('segmentRemainder', segmentRemainder);
 
-            screenshotPromises.push(await captureTabScreenshotFn(
+            screenshotPromises.push(captureTabScreenshotFn(
                 tabId,
                 segmentLength * avoidBug1784915CanvasHeightStep,
                 width,
@@ -72,7 +73,7 @@ const makeScreenshotBuilderFn = ({
             const base64Screenshots = await Promise.all(screenshotPromises);
             console.log('base64Screenshots', base64Screenshots);
 
-            const images = await Promise.all(base64Screenshots.map(async base64Screenshot => await makeImageFn(base64Screenshot)));
+            const images = await Promise.all(base64Screenshots.map(base64Screenshot => makeImageFn(base64Screenshot)));
             console.log('pixels', images);
 
             const pixelsInfo = await Promise.all(images.map(async image => {
@@ -87,12 +88,21 @@ const makeScreenshotBuilderFn = ({
             console.log('pixelsInfo', pixelsInfo);
 
             const pixels = pixelsInfo.map(info => info.pixels);
+            console.log('pixels', pixels);
+
             const pixelsFlat = Uint8ClampedArray.from(pixels.reduce((a, b) => [...a, ...b], []));
 
             console.log('pixelsFlat', pixelsFlat);
 
-            const png = UPNG.encode([pixelsInfo[0].pixels.buffer], pixelsInfo[0].width, pixelsInfo[0].height, 0);
-            // const png = UPNG.encode([(new Uint8Array([0,0,0,255, 255,0,0,255])).buffer], 2, 1, 0);
+            console.log('pixelsInfo[0]', pixelsInfo[0])
+            console.log('pixelsInfo[0].pixels.buffer', pixelsInfo[0].pixels.buffer)
+            const png = UPNG.encode(
+                [pixelsInfo[0].pixels.buffer],
+                pixelsInfo[0].width,
+                pixelsInfo[0].height,
+                pngCompressRate
+            );
+            // const png = UPNG.encode([(new Uint8Array([0,0,0,255, 255,0,0,255])).buffer], 2, 1, pngCompressRate);
 
             console.log('png', png);
 
